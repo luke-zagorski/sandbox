@@ -3,7 +3,7 @@ package pl.com.zagorski.spring.rest.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +18,7 @@ public class Memo {
   private Long id;
   private String note;
   @OneToMany
-  private List<Tag> tags;
+  private Set<MemoTag> memoTags;
 
   public Long getId() {
     return id;
@@ -36,11 +36,12 @@ public class Memo {
     this.note = note;
   }
 
-  public List<Tag> getTags() {
-    return tags;
+  public Set<MemoTag> getMemoTags() {
+    return memoTags;
   }
 
-  public void setTags(List<Tag> tags) {
-    this.tags = tags;
+  public void setMemoTags(Set<MemoTag> mamoTags) {
+    this.memoTags = mamoTags;
   }
+
 }

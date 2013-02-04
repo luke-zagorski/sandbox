@@ -2,6 +2,7 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="1.0">
 
   <persistence-unit name="srPersistenceUnit">
+
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
     <properties>

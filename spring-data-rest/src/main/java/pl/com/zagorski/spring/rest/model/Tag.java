@@ -2,6 +2,8 @@ package pl.com.zagorski.spring.rest.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,8 +16,10 @@ public class Tag {
 
   @Id
   private Long id;
-  private String name;
+  @OneToMany
+  private Set<MemoTag> memoTags;
 
+  private String name;
 
   public Long getId() {
     return id;
@@ -31,5 +35,13 @@ public class Tag {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Set<MemoTag> getMemoTags() {
+    return memoTags;
+  }
+
+  public void setMemoTags(Set<MemoTag> memoTags) {
+    this.memoTags = memoTags;
   }
 }
