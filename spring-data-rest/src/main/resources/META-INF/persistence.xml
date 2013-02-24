@@ -4,6 +4,9 @@
   <persistence-unit name="srPersistenceUnit">
 
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <!--<class>pl.com.zagorski.spring.rest.model.Memo</class>-->
+    <!--<class>pl.com.zagorski.spring.rest.model.Tag</class>-->
+    <!--<class>pl.com.zagorski.spring.rest.model.MemoTag</class>-->
 
     <properties>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
