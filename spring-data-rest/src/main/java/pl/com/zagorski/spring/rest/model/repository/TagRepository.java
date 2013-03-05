@@ -14,7 +14,6 @@ import java.util.List;
 @RestResource
 public interface TagRepository extends CrudRepository<Tag, Long> {
 
-  public List<Tag> findByName(@Param("name") String name);
-
+    public List<Tag> findByName(@Param("name") String name);
 
 }

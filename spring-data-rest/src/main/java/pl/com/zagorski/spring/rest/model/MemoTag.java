@@ -1,6 +1,8 @@
 package pl.com.zagorski.spring.rest.model;
 
+import javax.annotation.Generated;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -11,34 +13,35 @@ import javax.persistence.ManyToOne;
 @Entity
 public class MemoTag {
 
-  @Id
-  private Long id;
-  @ManyToOne(optional = false)
-  private Tag tag;
-  @ManyToOne(optional = false)
-  private Memo memo;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @ManyToOne(optional = false)
+    private Tag tag;
+    @ManyToOne(optional = false)
+    private Memo memo;
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public Tag getTag() {
-    return tag;
-  }
+    public Tag getTag() {
+        return tag;
+    }
 
-  public void setTag(Tag tag) {
-    this.tag = tag;
-  }
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
 
-  public Memo getMemo() {
-    return memo;
-  }
+    public Memo getMemo() {
+        return memo;
+    }
 
-  public void setMemo(Memo memo) {
-    this.memo = memo;
-  }
+    public void setMemo(Memo memo) {
+        this.memo = memo;
+    }
 }

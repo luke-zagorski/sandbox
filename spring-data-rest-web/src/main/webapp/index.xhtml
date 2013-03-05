@@ -1,16 +1,33 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/default.xhtml">
 
-<h:head>
+    <h:head>
 
-</h:head>
+    </h:head>
 
-<h:body>
-    <h:form>
-        <p:inputTextarea value="#{createResource.messaage}"/>
-        <p:commandButton action="#{createResource.processResource}"/>
-    </h:form>
-</h:body>
-</html>
+    <ui:define name="content">
+
+        <h:form>
+            <table>
+                <tr>
+                    <td>
+                        <p:commandButton action="#{createResource.processResource}" value="Zapisz"/>
+                        <p:commandButton value="Usuń"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h:body>
+                            <p:editor value="#{createResource.note}" width="700" height="400"/>
+                        </h:body>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

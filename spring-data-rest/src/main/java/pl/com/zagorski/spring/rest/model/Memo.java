@@ -1,8 +1,6 @@
 package pl.com.zagorski.spring.rest.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 /**
@@ -12,36 +10,38 @@ import java.util.Set;
  * Time: 14:47
  */
 @Entity
+
 public class Memo {
 
-  @Id
-  private Long id;
-  private String note;
-  @OneToMany
-  private Set<MemoTag> memoTags;
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String note;
+    @OneToMany
+    private Set<MemoTag> memoTags;
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getNote() {
-    return note;
-  }
+    public String getNote() {
+        return note;
+    }
 
-  public void setNote(String note) {
-    this.note = note;
-  }
+    public void setNote(String note) {
+        this.note = note;
+    }
 
-  public Set<MemoTag> getMemoTags() {
-    return memoTags;
-  }
+    public Set<MemoTag> getMemoTags() {
+        return memoTags;
+    }
 
-  public void setMemoTags(Set<MemoTag> mamoTags) {
-    this.memoTags = mamoTags;
-  }
+    public void setMemoTags(Set<MemoTag> mamoTags) {
+        this.memoTags = mamoTags;
+    }
 
 }

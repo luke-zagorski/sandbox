@@ -1,5 +1,7 @@
 package pl.com.zagorski.spring.rest.web;
 
+import org.springframework.web.client.RestTemplate;
+
 import javax.faces.bean.ManagedBean;
 
 /**
@@ -8,20 +10,28 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean
 public class CreateResource {
 
-    private String messaage;
+    private String note;
 
-
-
-    public String getMessaage() {
-        return messaage;
+    public String getNote() {
+        return note;
     }
 
-    public void setMessaage(String messaage) {
-        this.messaage = messaage;
+    public void setNote(String note) {
+        this.note = note;
     }
 
 
     public void processResource() {
-        System.out.print(messaage);
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        StringBuilder send = new StringBuilder();
+        send.append("{\n");
+        send.append("\"note\": \"");
+        send.append(note);
+        send.append("\"\n");
+        send.append("\t\n}");
+
+        restTemplate.postForObject("http://localhost:8080/rest/memo", send.toString(), String.class);
     }
 }
