@@ -1,0 +1,43 @@
+<ol>
+<span style=" color: #333333; font-family: Arial, Helvetica, sans-serif; background-color: white; font-size: 14px; font-weight: bold">
+<li>
+    Download  <span style="font:tahoma; color: #dea707; font-weight: bold">STS 3.2.0</span>
+    from&nbsp; <a href="http://www.springsource.org/downloads/sts-ggts">HERE</a>.
+</li>
+<li>
+    Extract archive. Inside "springsource" directory you should find <span style="font:tahoma; color: #dea707; font-weight: bold">vfabric-tc-server-developer-2.8.2.RELEASE</span>
+</li>
+<li>
+    Open console and go to:
+    <pre style="background-color: #eee496; border: 1pt solid black; clear: both; color: black; font-size: 11pt; font-weight: normal; line-height: 1; padding: 7pt 3pt;">SPRINGSOURCE_HOME/vfabric-tc-server-developer-2.8.2.RELEASE/</pre>
+
+</li>
+<li>
+        Create tc-runtime instance from "insight" template:
+        <pre style="background-color: #eee496; border: 1pt solid black; clear: both; color: black; font-size: 11pt; font-weight: normal; line-height: 1; padding: 7pt 3pt;">SPRINGSOURCE_HOME/tcruntime-instance.sh create ins-instance -t insight</pre>
+</li>
+<li>
+Copy following files from springsource instance directory which was created in step: 4 (in this case: SPRINGSOURCE_HOME/vfabric-tc-server-developer-2.8.2.RELEASE/<span style="font:tahoma; color: #dea707; font-weight: bold">ins-instance</span>) into Tomcat directory.
+    <pre style="background-color: #eee496; border: 1pt solid black; clear: both; color: black; font-size: 11pt; font-weight: normal; line-height: 1; padding:7pt 3pt;">
+cp bin/setenv.sh $CATALINA_HOME/bin/
+cp bin/insight-bootstrap-tcserver-1.8.3.RELEASE.jar $CATALINA_HOME/bin/
+cp -r insight $CATALINA_HOME/
+cp lib/* $CATALINA_HOME/lib/
+cp webapps/insight.war $CATALINA_HOME/webapps
+    </pre>
+</li>
+<li>
+    Edit $CATALINA_HOME/conf/server.xml and add the following Valve to the Engine block.
+    <pre style="background-color: #eee496; border: 1pt solid black; clear: both; color: black; font-size: 11pt; font-weight: normal; line-height: 1; padding:7pt 3pt;">
+&lt;Valve className="com.springsource.insight.collection.tcserver.request.HttpRequestOperationCollectionValve"/&gt;
+    </pre>
+</li>
+<li>
+    Edit $CATALINA_HOME/conf/context.xml and add the following before the closing Context tag
+        <pre style="background-color: #eee496; border: 1pt solid black; clear: both; color: black; font-size: 11pt; font-weight: normal; line-height: 1; padding:7pt 3pt;">
+&lt;Loader loaderClass="com.springsource.insight.collection.tcserver.ltw.TomcatWeavingInsightClassLoader"/&gt;
+&lt;Listener className="com.springsource.insight.collection.tcserver.lifecycle.ApplicationLifecycleCollectionListener"/&gt;
+        </pre>
+</li>
+</span>
+</ol>

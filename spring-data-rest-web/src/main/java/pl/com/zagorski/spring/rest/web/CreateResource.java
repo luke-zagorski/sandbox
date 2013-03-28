@@ -8,7 +8,7 @@ import javax.faces.bean.ManagedBean;
  * User: luke
  */
 @ManagedBean
-public class CreateResource {
+public class CreateResource extends AbstractBean {
 
     private String note;
 
@@ -19,7 +19,6 @@ public class CreateResource {
     public void setNote(String note) {
         this.note = note;
     }
-
 
     public void processResource() {
 
@@ -32,6 +31,6 @@ public class CreateResource {
         send.append("\"\n");
         send.append("\t\n}");
 
-        restTemplate.postForObject("http://localhost:8080/rest/memo", send.toString(), String.class);
+        restTemplate.postForObject(API_ADDRESS + "/memo", send.toString(), String.class);
     }
 }
