@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:int-amqp="http://www.springframework.org/schema/integration/amqp"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/amqp
+        http://www.springframework.org/schema/integration/amqp/spring-integration-amqp.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+    <import resource="classpath*:infra-context.xml"/>
+
+
+    <int-amqp:inbound-gateway id="customerInfoInGateway"
+                              queue-names="tf.customerinfo"
+                              connection-factory="rabbitConnectionFactory"
+                              request-channel="customerInfoChanel"
+            />
+
+    <int:chain input-channel="customerInfoChanel">
+        <int:json-to-object-transformer type="pl.com.zagorski.demosys.CustomerMessage"/>
+        <int:service-activator method="process">
+            <bean class="pl.com.zagorski.demosys.CustomerService"/>
+        </int:service-activator>
+        <int:object-to-json-transformer content-type="text/x-json"/>
+        <int-amqp:outbound-gateway id="customerInfoOutGateway" exchange-name="exchange.in" routing-key="message.billing" amqp-template="amqpTemplate"/>
+    </int:chain>
+
+</beans>
