@@ -1,0 +1,14 @@
+#java specific files
+*.class
+# Package files 
+*.war
+*.ear
+
+*.iml
+*.ipr
+*.iws
+.idea/
+
+chat-web/target
+chat-core/target
+

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+  <!-- read properties from a properties file -->
+  <context:property-placeholder location="classpath:perform.properties"/>
+
+  <context:annotation-config/>
+
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+    <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+    <property name="url" value="jdbc:hsqldb:file:performdb;shutdown=true;"/>
+    <property name="username" value="VIDEO_USER"/>
+    <property name="password" value=""/>
+    <property name="suppressClose" value="true"/>
+    <property name="autoCommit" value="true"/>
+  </bean>
+
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="packagesToScan" value="com.performgroup.interview.dao.domain"/>
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+        <prop key="show_sql">true</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+    <description>
+      Template is configured with session factory defined in the main web app
+    </description>
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean name="jdbcTemplate" class="org.springframework.jdbc.core.simple.SimpleJdbcTemplate">
+    <constructor-arg>
+      <ref bean="dataSource"/>
+    </constructor-arg>
+  </bean>
+  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+  <!-- Runner -->
+  <bean id="videoProcessor" class="com.performgroup.interview.cmd.VideoProcessor">
+    <property name="videoService" ref="videoService"/>
+    <property name="videoIngestFolder" value="${videoIngest.folder}"/>
+  </bean>
+
+  <!-- Data Access Objects -->
+  <bean id="videoDAO" class="com.performgroup.interview.dao.impl.VideoHibernateDAO">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="videoInCategoryDAO" class="com.performgroup.interview.dao.impl.VideoInCategoryHibernateDAO">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="videoReportingJDBCDAO" class="com.performgroup.interview.dao.impl.VideoReportingJDBCDAO">
+
+  </bean>
+
+  <bean id="categoryDAO" class="com.performgroup.interview.dao.impl.CategoryHibernateDAO">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <!-- REGISTRY -->
+  <bean id="categoryRegistry" class="com.performgroup.interview.domain.impl.CategoryRegistryImpl"/>
+  <bean id="videoRegistry" class="com.performgroup.interview.domain.impl.VideoRegistryImpl"/>
+
+  <!-- Services  -->
+  <bean id="videoService" class="com.performgroup.interview.service.impl.VideoServiceImpl"/>
+
+  <!-- Unmarshallers -->
+  <bean id="abstractMapper" abstract="true" class="com.performgroup.interview.utils.AbstractDtoMapper"/>
+
+  <bean id="jibxMarshaller" class="org.springframework.oxm.jibx.JibxMarshaller">
+    <property name="targetClass" value="com.performgroup.interview.dto.VideoDto"/>
+  </bean>
+
+  <bean id="videoMapper" parent="abstractMapper" class="com.performgroup.interview.dto.mappers.VideoMapper">
+    <property name="unmarshaller" ref="jibxMarshaller"/>
+  </bean>
+
+</beans>

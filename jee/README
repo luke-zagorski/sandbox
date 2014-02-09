@@ -1,0 +1,16 @@
+1. Requirements:
+- JBoss AS 7
+- Mysql Database with:
+	- CharacterEncoding UTF-8
+	- CREATE DATABASE chat DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci
+	- Database usr/pass root/root
+	- localhost:3306
+2. App configuration:
+	- JBoss 7 configuration file location /push-chat/config/standalone.xml
+	- Copy /push-chat/config/standalone.xml to $JBOSS_HOME/standalone/configuration/
+	- Copy /push-chat/config/db/* to $JBOSS_HOME/modules/com/mysql/main/
+3. Deployable artifact: chat/chat-web/target/chat-web.war
+4. Application Url ...:8080/chat/
+5. To enable JMS : in web.xml set "org.richfaces.push.jms.enabled" to true
+6. Test users luke/luke johny/johny pablo/pablo
+7. Tests: JBOSS_HOME must be set, test profile: arq-jbossas-managed

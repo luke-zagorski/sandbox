@@ -1,0 +1,36 @@
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Ekran logowania</title>
+    <link type="text/css" rel="stylesheet" href="resources/css/screen.css" media="screen"/>
+</head>
+<body>
+
+
+<div id="container">
+    <div id="wrapper-login">
+        <div class="form-box form-box1">
+            <h2>Logowanie</h2>
+            <form name="loginForm" method="POST" action="j_security_check">
+                <p>
+                    <strong><label for="username">Nick:</label></strong>
+                    <input id="username" type="text" name="j_username"/>
+                </p>
+
+                <p>
+                    <strong><label for="password">Hasło:</label></strong>
+                    <input id="password" type="password" name="j_password"/>
+                </p>
+
+                <p>
+                    <input type="submit" value="Wchodzę"/>
+                    <input type="reset" value="Resetuj"/>
+                </p>
+            </form>
+            <a href="register.jsf">Zarejestruj się</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

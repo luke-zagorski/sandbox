@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+
+    <filter>
+        <filter-name>CustomCharacterEncodingFilter</filter-name>
+        <filter-class>pl.com.zagorski.msg.util.filter.CustomCharacterEncodingFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>CustomCharacterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>noCacheFilter</filter-name>
+        <filter-class>pl.com.zagorski.msg.util.filter.CacheFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>noCacheFilter</filter-name>
+        <url-pattern>/chat.jsf</url-pattern>
+    </filter-mapping>
+
+
+    <security-constraint>
+
+        <web-resource-collection>
+            <web-resource-name>chat</web-resource-name>
+            <url-pattern>/chat.jsf</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+
+        <auth-constraint>
+            <description/>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>MySecurityDomain</realm-name>
+        <form-login-config>
+            <form-login-page>/login.xhtml</form-login-page>
+            <form-error-page>/login.xhtml</form-error-page>
+        </form-login-config>
+
+    </login-config>
+
+    <security-role>
+        <role-name>user</role-name>
+    </security-role>
+
+
+    <servlet>
+        <servlet-name>Push Servlet</servlet-name>
+        <servlet-class>org.richfaces.webapp.PushServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <async-supported>true</async-supported>
+    </servlet>
+
+
+    <context-param>
+        <param-name>org.atmosphere.useWebSocket</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>org.richfaces.push.jms.enabled</param-name>
+        <param-value>false</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>org.atmosphere.useBlocking</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>org.richfaces.push.jms.connectionUsername</param-name>
+        <param-value>guest</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>org.richfaces.push.jms.connectionPassword</param-name>
+        <param-value>guest</param-value>
+    </context-param>
+
+
+</web-app>

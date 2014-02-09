@@ -1,0 +1,10 @@
+<binding>
+    <mapping name="videoEntity" class="com.performgroup.interview.dto.VideoDto">
+        <value name="title" field="title"/>
+        <value name="type" field="videoType"/>
+        <value name="path" field="videoPath"/>
+        <collection name="keywordSet" field="keywordSet">
+            <value name="keyword"/>
+        </collection>
+    </mapping>
+</binding>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                template="/WEB-INF/templates/default.xhtml">
+
+    <ui:define name="content">
+        <h:form>
+            <h3>
+                #{msg.addMessage} #{msg.loggedAs} "${currentUser.nickname}" <h:commandLink action="#{userHandler.logout}" value=" Wyloguj "/>
+                <br/>
+                <h:form>
+                    #{msg.description}
+                    "<rich:inplaceInput defaultLabel="Ustaw swój status" value="#{currentUser.statusMessage}"/>"
+                    <a4j:commandLink value="Ustaw" execute="@form" action="#{userHandler.setStatus}"/>
+                </h:form>
+
+            </h3>
+        </h:form>
+
+        <table>
+            <tr>
+                <td>
+                    <h:form>
+                        <p:scrollPanel style="height:455px;width:250px">
+                            <p:contextMenu id="contextUserDataTable" for="usersDataTable">
+                                <p:menuitem  value="Historia" action="#{contactActionHandler.history}"/>
+                                <p:menuitem  value="Zablokuj" update="usersDataTable contextUserDataTable" action="#{contactActionHandler.blockUser}"/>
+                                <p:menuitem  value="Odblokuj" update="usersDataTable contextUserDataTable" action="#{contactActionHandler.unblockUser}"/>
+                            </p:contextMenu>
+                            <p:dataTable id="usersDataTable"
+                                         var="user"
+                                         rowKey="#{user.nickname}"
+                                         value="#{contactListHandler.userDtoModel}"
+                                         selectionMode="single"
+                                         selection="#{contactListHandler.selectedUser}"
+                                         style="height:455px;width:250px">
+
+                                <a4j:ajax event="rowSelect" listener="#{contactListHandler.createConversation}" update="usersDataTable"/>
+
+                                <p:column headerText="Kontakty" style="width:240px">
+
+                                    <table style="border-style: hidden;">
+                                        <tr>
+                                            <td width="15px" style="border-style: hidden;">
+                                                <h:graphicImage rendered="#{user.status eq 0}" value="/resources/gfx/user-status-0.png"/>
+                                                <h:graphicImage rendered="#{user.status eq 1}" value="/resources/gfx/user-status-1.png"/>
+                                                <h:graphicImage rendered="#{user.status eq 2}" value="/resources/gfx/user-status-2.png"/>
+                                                <h:graphicImage rendered="#{user.status eq 3}" value="/resources/gfx/user-status-3.png"/>
+                                            </td>
+                                            <td style="border-style: hidden;">
+                                                #{user.nickname} <br/>
+                                                <small>#{user.statusMessage}</small>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </p:column>
+                            </p:dataTable>
+                        </p:scrollPanel>
+                    </h:form>
+                </td>
+
+                <td>
+                    <p:tabView id="tabView">
+
+                        <p:tab title="Kanał ogólny">
+                            <h:form>
+                                <a4j:push address="publicChatDataTopic" ondataavailable="jQuery('&lt;div /&gt;').appendTo('.publicOutput').text(event.rf.data)"/>
+                                <p:fieldset style="height:300px;width:480px">
+                                    <h:panelGroup id="messages" styleClass="chatOutput publicOutput" layout="block"/>
+                                </p:fieldset>
+
+                                <p:separator/>
+                                <h:inputTextarea id="message"
+                                                 value="#{publicMessage.text}"
+                                                 styleClass="chatInput"/>
+                                <p:spacer width="5"/>
+                                <a4j:commandButton action="#{publicChatHandler.addMessage}"
+                                                   value="#{msg.send}"
+                                                   focus="message"
+                                                   execute="@form"
+                                                   onclick="#{rich:element('message')}.focus()"
+                                                   oncomplete="#{rich:element('message')}.value=''"/>
+                            </h:form>
+                        </p:tab>
+
+                        <p:tab id="privaateTab" title="Prywatna rozmowa">
+                            <h:form>
+                                <a4j:push address="${currentUser.nickname}@privateChatDataTopic" ondataavailable="jQuery('&lt;div /&gt;').appendTo('.privateOutput').text(event.rf.data)"/>
+                                <p:fieldset style="height:300px;width:480px">
+                                    <h:panelGroup id="privateChatDateList" styleClass="chatOutput privateOutput" layout="block">
+                                        <c:forEach items="${conversationMessages}" var="vmsg" varStatus="loop">
+                                            <div>[#{vmsg.createdAtString}] #{vmsg.nickname} : #{vmsg.text}</div>
+                                        </c:forEach>
+                                    </h:panelGroup>
+                                </p:fieldset>
+                                <p:separator/>
+                                <h:inputTextarea id="message2"
+                                                 value="#{privateMessage.text}"
+                                                 styleClass="chatInput"/>
+
+                                <p:spacer width="5"/>
+                                <a4j:commandButton action="#{privateChatHandler.addMessage}"
+                                                   value="#{msg.send}"
+                                                   focus="message2"
+                                                   execute="@form"
+                                                   onclick="#{rich:element('message2')}.focus()"
+                                                   oncomplete="#{rich:element('message2')}.value=''"/>
+                            </h:form>
+                        </p:tab>
+
+                    </p:tabView>
+                </td>
+            </tr>
+        </table>
+
+
+        <a4j:push address="${currentUser.nickname}@privateInfoTopic" onerror="alert(event.rf.data)">
+            <a4j:ajax event="dataavailable" render="usersDataTable talkTo"/>
+        </a4j:push>
+
+        <a4j:push address="${currentUser.nickname}@privateChatInfoTopic" onerror="alert(event.rf.data)">
+            <a4j:ajax event="dataavailable" render="privateChatDateList talkTo"/>
+        </a4j:push>
+
+        <a4j:push address="broadcastTopic" onerror="alert(event.rf.data)">
+            <a4j:ajax event="dataavailable" render="usersDataTable"/>
+        </a4j:push>
+
+    </ui:define>
+</ui:composition>

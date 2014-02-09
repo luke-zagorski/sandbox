@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file is not required if you don't need any extra configuration. -->
+<faces-config version="2.0"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="
+      http://java.sun.com/xml/ns/javaee
+      http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+
+    <!-- Write your navigation rules here. You are encouraged to use CDI for creating @Named managed beans. -->
+
+    <application>
+        <resource-bundle>
+            <base-name>cfg</base-name>
+            <var>cfg</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>Messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+
+        <system-event-listener>
+            <system-event-listener-class>pl.com.zagorski.msg.util.TopicInitializer</system-event-listener-class>
+            <system-event-class>javax.faces.event.PostConstructApplicationEvent</system-event-class>
+        </system-event-listener>
+
+    </application>
+    <navigation-rule>
+        <from-view-id>/register.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{registerHandler.register}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/login.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/chat.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{userHandler.logout}</from-action>
+            <from-outcome>success</from-outcome>
+            <to-view-id>/login.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+
+</faces-config>

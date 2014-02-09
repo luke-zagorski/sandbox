@@ -1,0 +1,13 @@
+#java specific files
+*.class
+# Package files 
+*.war
+*.ear
+
+*.iml
+*.ipr
+*.iws
+*.log
+.idea/
+target/
+~/
