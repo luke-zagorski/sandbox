@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app>
+
+<head>
+    <title>angular tst</title>
+    <script src="lib/angular.js"></script>
+    <script src="js/ctrls/mainCtrl.js"></script>
+</head>
+
+<body ng-controller="ListExpansesCtrl">
+
+<p>Nothing here a {{'yet' + '!'}}</p>
+
+Filter: <input ng-model="query">
+
+<ul>
+    <li ng-repeat="expanse in expanses.content|filter:query|orderBy:expansesOrder">
+        {{expanse.name}} - {{expanse.spent}}  {{expanse.links}}
+    </li>
+</ul>
+</body>
+
+</html>
